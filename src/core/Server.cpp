@@ -42,7 +42,9 @@ void Server::initClient() {
     m_client->enable_server_hostname_verification(false);
 
     // Set default headers
-    m_client->set_default_headers({{"Accept", "application/json"}, {"Content-Type", "application/json"}});
+    m_client->set_default_headers({{"Accept", "application/json"},
+                                   {"Content-Type", "application/json"},
+                                   {"User-Agent", "VACDM Plugin/" + std::string(PLUGIN_VERSION)}});
 
     // Add authorization if token is available
     if (!m_authToken.empty()) {
