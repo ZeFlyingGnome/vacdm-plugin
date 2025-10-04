@@ -144,7 +144,7 @@ std::list<types::Pilot> Server::getPilots(const std::list<std::string> airports)
 
     // Add airport filter if specified
     if (!airports.empty()) {
-        url += "?airports=";
+        url += "?adep=";
         url += std::accumulate(std::next(airports.begin()), airports.end(), *airports.begin(),
                                [](const std::string& a, const std::string& b) { return a + "," + b; });
     }
