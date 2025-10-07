@@ -134,6 +134,36 @@ Server::ServerConfiguration Server::getServerConfig() {
     return ServerConfiguration();
 }
 
+void Server::retrieveSupportedAirports() {
+    if (false == this->m_apiIsChecked || false == this->m_apiIsValid) { return; }
+
+    std::lock_guard guard(m_clientMutex);
+    if (m_client) {
+        std::string url = "/api/v1/airports";
+        auto result = m_client->Get(url);
+
+        if (result && result->status == 200) {
+            nlohmann::json root;
+
+            try {
+                root = nlohmann::json::parse(result->body);
+                std::list<std::string> airports;
+                for (const auto& airport : std::as_const(root)) {
+                    airports.push_back(airport["icao"].get<std::string>());
+                }
+                m_supportedAirports = airports;
+            } catch (const std::exception& e) {
+                SpdLogger::log(SpdLogger::LogSender::Server, "Failed to parse response JSON: " + std::string(e.what()),
+                            SpdLogger::LogLevel::Info);
+            }
+        }
+    }
+}
+
+std::list<std::string> Server::getSupportedAirports() { return m_supportedAirports; };
+
+
+
 std::list<types::Pilot> Server::getPilots(const std::list<std::string> airports) {
     std::lock_guard guard(m_clientMutex);
     if (!m_client) {

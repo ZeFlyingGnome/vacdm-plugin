@@ -355,7 +355,20 @@ DataManager::MessageType DataManager::deltaEuroscopeToBackend(const std::array<t
 
 void DataManager::setActiveAirports(const std::list<std::string> activeAirports) {
     std::lock_guard guard(this->m_airportLock);
-    this->m_activeAirports = activeAirports;
+
+    std::list<std::string> supportedAirports = Server::instance().getSupportedAirports();
+    std::list<std::string> cdmActiveAirports;
+
+    for (const auto& activeAirport : activeAirports) {
+        for (const auto& supportedAirport : supportedAirports) {
+            if (supportedAirport == activeAirport) {
+                cdmActiveAirports.push_back(supportedAirport);
+                break;
+            }
+        }
+    }
+
+    this->m_activeAirports = cdmActiveAirports;
 }
 
 void DataManager::queueFlightplanUpdate(EuroScopePlugIn::CFlightPlan flightplan) {
