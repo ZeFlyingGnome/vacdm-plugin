@@ -135,7 +135,9 @@ Server::ServerConfiguration Server::getServerConfig() {
 }
 
 void Server::retrieveSupportedAirports() {
-    if (false == this->m_apiIsChecked || false == this->m_apiIsValid) { return; }
+    if (false == this->m_apiIsChecked || false == this->m_apiIsValid) {
+        return;
+    }
 
     std::lock_guard guard(m_clientMutex);
     if (m_client) {
@@ -154,15 +156,13 @@ void Server::retrieveSupportedAirports() {
                 m_supportedAirports = airports;
             } catch (const std::exception& e) {
                 SpdLogger::log(SpdLogger::LogSender::Server, "Failed to parse response JSON: " + std::string(e.what()),
-                            SpdLogger::LogLevel::Info);
+                               SpdLogger::LogLevel::Info);
             }
         }
     }
 }
 
 std::list<std::string> Server::getSupportedAirports() { return m_supportedAirports; };
-
-
 
 std::list<types::Pilot> Server::getPilots(const std::list<std::string> airports) {
     std::lock_guard guard(m_clientMutex);
@@ -210,8 +210,8 @@ std::list<types::Pilot> Server::getPilots(const std::list<std::string> airports)
                     pilots.back().ctot = utils::Date::isoStringToTimestamp(pilot["vacdm"]["ctot"].get<std::string>());
                     pilots.back().ttot = utils::Date::isoStringToTimestamp(pilot["vacdm"]["ttot"].get<std::string>());
                     pilots.back().tsat = utils::Date::isoStringToTimestamp(pilot["vacdm"]["tsat"].get<std::string>());
-                    pilots.back().exot =
-                        std::chrono::utc_clock::time_point(std::chrono::minutes(pilot["vacdm"]["exot"].get<long int>()));
+                    pilots.back().exot = std::chrono::utc_clock::time_point(
+                        std::chrono::minutes(pilot["vacdm"]["exot"].get<long int>()));
                     pilots.back().asat = utils::Date::isoStringToTimestamp(pilot["vacdm"]["asat"].get<std::string>());
                     pilots.back().aobt = utils::Date::isoStringToTimestamp(pilot["vacdm"]["aobt"].get<std::string>());
                     pilots.back().atot = utils::Date::isoStringToTimestamp(pilot["vacdm"]["atot"].get<std::string>());
@@ -236,14 +236,14 @@ std::list<types::Pilot> Server::getPilots(const std::list<std::string> airports)
                 }
             } catch (const std::exception& e) {
                 SpdLogger::log(SpdLogger::LogSender::Server, "Failed to parse response JSON: " + std::string(e.what()),
-                            SpdLogger::LogLevel::Info);
+                               SpdLogger::LogLevel::Info);
             }
         }
     }
 
     SpdLogger::log(SpdLogger::LogSender::Server, "Pilots size: " + std::to_string(pilots.size()),
-                SpdLogger::LogLevel::Info);
-    return pilots;    
+                   SpdLogger::LogLevel::Info);
+    return pilots;
 }
 
 void Server::sendPostMessage(const std::string& endpointUrl, const nlohmann::json& root) {
