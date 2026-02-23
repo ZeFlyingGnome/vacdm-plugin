@@ -57,6 +57,7 @@ void vACDM::checkServerConfiguration() {
     } else {
         std::string serverName = Server::instance().getServerConfig().name;
         DisplayMessage(("Connected to " + serverName), "Server");
+        Server::instance().retrieveSupportedAirports();
         // set active airports and runways
         this->OnAirportRunwayActivityChanged();
     }

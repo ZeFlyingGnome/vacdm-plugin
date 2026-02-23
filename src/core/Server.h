@@ -35,6 +35,8 @@ class Server {
     std::string m_errorCode;
     ServerConfiguration m_serverConfiguration;
 
+    std::list<std::string> m_supportedAirports;
+
    public:
     ~Server();
     Server(const Server&) = delete;
@@ -77,6 +79,9 @@ class Server {
     const std::string& errorMessage() const;
     void setMaster(bool master);
     bool getMaster();
+
+    void retrieveSupportedAirports();
+    std::list<std::string> getSupportedAirports();
 
    private:
     // Helper method to initialize/reinitialize the HTTP client

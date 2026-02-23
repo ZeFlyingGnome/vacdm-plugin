@@ -139,8 +139,8 @@ void vACDM::OnFunctionCall(int functionId, const char *itemString, POINT pt, REC
             break;
         }
         case AOBT_NOW_AND_STATE: {
-            // set ASRT if ASRT has not been set yet
-            if (pilot.asrt == types::defaultTime) {
+            // set AORT if AORT has not been set yet
+            if (pilot.aort == types::defaultTime) {
                 DataManager::instance().handleTagFunction(DataManager::MessageType::UpdateAORT, pilot.callsign,
                                                           std::chrono::utc_clock::now());
             }
