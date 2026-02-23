@@ -5,6 +5,7 @@ on:
     branches:
       - "develop"
       - "vaccfr"
+  workflow_dispatch:
 
 env:
   DLL_NAME: vACDM.dll
